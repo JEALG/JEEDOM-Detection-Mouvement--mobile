@@ -1,12 +1,11 @@
-<div style="width:90px;height:100%;vertical-align: top;" class="cmd tooltips cmd-widget cursor #history#" data-type="info" data-subtype="binary" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#" title="#collectDate#">
+<div style="width:90px;height:100%;vertical-align: top;" class="cmd" data-type="info" data-subtype="binary" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#" title="#collectDate#">
   	<!-- Info Widget
         Basé sur les widget de 	: DetectionMouvement "Dashboard DetectionMouvement" de ksoul78
         Mise à jour				: JAG 20190527 : Correction code pour V4
     -->
-    <center>
-        <div class="content-xs" style="#hideCmdName#">#name_display#</div>
-        <span class="iconCmd#id#" title="#name#"></span>
-    </center>
+    <span style="font-size:12px;#hideCmdName#">#name_display#</span>
+    <div class="iconCmd#id#"></div>
+    <span class="timeCmd#id# timeCmd value" style="font-weight: bold;font-size : 10px;"></span>
     <script>
         jeedom.cmd.update['#id#'] = function(_options){
             // Options de personnalisation avec valeur par defaut
@@ -34,7 +33,25 @@
             }else {
                 $('.cmd[data-cmd_id=#id#] .iconCmd#id#').empty().append('<img src="'+srcImgURL_M +srcImglogoER_M +'.'+ srcImglogoER_M_T+'" '+srcImgSize_M+'>');
             }
+            // Derniere durée changement dernier etat -- Merci @Salvialf pour le code
+                var srcImglogoTime_M    = '#logoTime_M#';
+      
+                if (srcImglogoTime_M == 'duree') {
+                    jeedom.cmd.displayDuration(_options.valueDate, $('.cmd[data-cmd_id=#id#] .timeCmd#id#'));
+                } else if (srcImglogoTime_M == 'date') {
+                    var week            = ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'];
+                    var date            = new Date(_options.valueDate.replace(' ', 'T'));
+                    var t               = _options.valueDate.split(/[- :]/);
+                    var format          = week[date.getDay()]+" "+t[2]+"/"+t[1];
+                    var time            = "à "+t[3]+":"+t[4];
+                    $('.cmd[data-cmd_id=#id#] .timeCmd#id#').empty().html(format+'<br>'+time);
+                } else if (srcImglogoTime_M == 'heure') {
+                    var t               = _options.valueDate.split(/[- :]/);
+                    var time            = "à "+t[3]+":"+t[4]+":"+t[5];
+                    $('.cmd[data-cmd_id=#id#] .timeCmd#id#').empty().html(time);
+                }
         }
+
 	jeedom.cmd.update['#id#']({display_value:'#state#'});
 	</script>
 </div>
